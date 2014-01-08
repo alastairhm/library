@@ -1,0 +1,36 @@
+Partition hard drives /dev/sda1 /dev/sda2 with GParted as ext 4
+Boot from ISO & check, setup network https://wiki.archlinux.org/index.php/Beginners%27_Guide#Wired
+Mount partitions mount /dev/sda1 /mnt mount /dev/sda2 /mnt/home
+mkswap /dev/sda3 swapon /dev/sda3
+Edit Mirror List vi /etc/pacman.d/mirrorlist
+Install base pacstrap -i /mnt base
+genfstab -U -p /mnt >> /mnt/etc/fstab
+arch-chroot /mnt
+nano /etc/locale.gen
+echo LANG=en_GB.UTF-8 > /etc/locale.conf
+export LANG=en_GB.UTF-8
+ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
+hwclock --systohc --utc
+systemctl enable dhcpcd@eth0.service
+passwd
+useradd -m -g users -G wheel,storage,power -s /bin/bash alastair
+passwd alastair
+pacman -S sudo
+visudo
+pacman -S grub-bios
+grub-install --target=i386-pc --recheck /dev/sda
+grub-mkconfig -o /boot/grub/grub.cfg
+exit, unmount, reboot
+sudo pacman -S alsa-utils
+alsamixer ; speaker-test -c 2
+pacman -S xf86-video-vesa
+pacman -S xorg-server xorg-xinit xorg-server-utils xorg-twm xorg-xclock xterm
+startx
+sudo pacman -S ttf-dejavu
+pacman -S xfce4 xfce4-goodies
+systemctl disable fam.service
+pacman -Rd fam
+pacman -S gamin
+cp /etc/skel/.xinitrc ~/.xinitrc ; vi .xinitrc
+pacman -S openssh
+systemctl enable sshd.service
