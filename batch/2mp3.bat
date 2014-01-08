@@ -1,0 +1,1 @@
+"C:\program Files\VideoLAN\VLC\vlc.exe" %1 --sout #transcode{acodec=mp3,ab=192}:duplicate{dst=std{access=file,mux=raw,dst=\"%1.mp3\"},select=\"novideo\"} vlc:quit
